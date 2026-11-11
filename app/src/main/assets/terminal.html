@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>hermes terminal</title>
+<link rel="stylesheet" href="xterm.css">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #0b0d10;
+    overflow: hidden;
+  }
+  #terminal {
+    width: 100%;
+    height: 100%;
+  }
+  /* xterm's viewport should never show a light scrollbar track */
+  .xterm-viewport {
+    background-color: #0b0d10 !important;
+  }
+</style>
+<script src="xterm.js"></script>
+<script src="addon-fit.js"></script>
+</head>
+<body>
+<div id="terminal"></div>
+<script>
+(function () {
+  "use strict";
+
+  var term = new Terminal({
+    cursorBlink: true,
+    fontSize: 13,
+    lineHeight: 1.2,
+    letterSpacing: 0,
+    scrollback: 5000,
+    fontFamily: 'Menlo, Consolas, "DejaVu Sans Mono", "Courier New", monospace',
+    theme: {
+      background: "#0b0d10",
+      foreground: "#d8dee9",
+      cursor: "#7ee787",
+      cursorAccent: "#0b0d10",
+      selectionBackground: "#264f78",
+      black: "#0b0d10",
+      red: "#f85149",
+      green: "#3fb950",
+      yellow: "#d29922",
+      blue: "#58a6ff",
+      magenta: "#bc8cff",
+      cyan: "#39c5cf",
+      white: "#d8dee9",
+      brightBlack: "#57606a",
+      brightWhite: "#ffffff"
+    }
+  });
+
+  var fit = new FitAddon.FitAddon();
+  term.loadAddon(fit);
+  term.open(document.getElementById("terminal"));
+  try { fit.fit(); } catch (e) { /* container may be 0x0 at load */ }
+
+  var ws = null;
+
+  function report(state) {
+    try { AndroidChat.onSocketState(state); } catch (e) { /* bridge absent */ }
+  }
+
+  function closeWs() {
+    if (ws) {
+      try { ws.onclose = null; ws.onerror = null; ws.onmessage = null; ws.close(); } catch (e) {}
+      ws = null;
+    }
+  }
+
+  function sendResize() {
+    if (ws && ws.readyState === 1) {
+      ws.send("\x1b[RESIZE:" + term.cols + ";" + term.rows + "]");
+    }
+  }
+
+  // Native calls this with the fully-built wss:// URL (ticket included).
+  // Reconnects reuse the same function; any previous socket is closed first.
+  window.hermesConnect = function (url) {
+    closeWs();
+    try {
+      ws = new WebSocket(url);
+    } catch (e) {
+      ws = null;
+      report("error");
+      return;
+    }
+    ws.binaryType = "arraybuffer";
+    ws.onopen = function () {
+      report("open");
+      try { fit.fit(); } catch (e) {}
+      sendResize();
+    };
+    ws.onmessage = function (ev) {
+      if (typeof ev.data === "string") {
+        term.write(ev.data);
+      } else {
+        term.write(new Uint8Array(ev.data));
+      }
+    };
+    ws.onclose = function () { report("closed"); };
+    ws.onerror = function () { report("error"); };
+  };
+
+  // Native input bar → PTY. Returns true/false so Kotlin can surface
+  // "not connected" without owning the socket. Multi-line drafts go through
+  // bracketed paste so the TUI inserts the newlines instead of submitting each
+  // line; the trailing CR outside the paste is the one submit.
+  window.hermesSend = function (text) {
+    if (ws && ws.readyState === 1) {
+      if (text.indexOf("\n") >= 0) {
+        // Bracketed paste inserts the whole draft (newlines preserved). The
+        // trailing CR must arrive AFTER the paste burst goes quiet, otherwise
+        // the TUI treats it as one more pasted newline and never submits.
+        ws.send("\x1b[200~" + text + "\x1b[201~");
+        setTimeout(function () {
+          if (ws && ws.readyState === 1) ws.send("\r");
+        }, 400);
+      } else {
+        ws.send(text + "\r");
+      }
+      return true;
+    }
+    return false;
+  };
+
+  window.hermesFit = function () {
+    try { fit.fit(); } catch (e) {}
+  };
+
+  window.hermesDisconnect = function () {
+    closeWs();
+    report("closed");
+  };
+
+  term.onResize(function (dims) {
+    if (ws && ws.readyState === 1) {
+      ws.send("\x1b[RESIZE:" + dims.cols + ";" + dims.rows + "]");
+    }
+  });
+
+  window.addEventListener("resize", function () {
+    try { fit.fit(); } catch (e) {}
+  });
+
+  report("idle");
+})();
+</script>
+</body>
+</html>

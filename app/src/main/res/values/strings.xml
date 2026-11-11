@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hermes Remote</string>
+
+    <!-- Generic actions -->
+    <string name="action_back">Back</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="loading">Loading…</string>
+
+    <!-- API error mapping (data-layer exceptions must not be shown raw) -->
+    <string name="api_error_invalid_server">Invalid server address — it must start with http:// or https://</string>
+    <string name="api_error_unauthorized">Wrong username or password, or the session expired</string>
+    <string name="api_error_rate_limited">Too many attempts, please try again later</string>
+    <string name="api_error_network">Cannot reach the server</string>
+    <string name="api_error_http">Server error (HTTP %1$d)</string>
+    <string name="api_error_unknown">Error: %1$s</string>
+    <string name="locks_plugin_unavailable">Session-lock plugin not installed on this gateway</string>
+
+    <!-- Login -->
+    <string name="login_subtitle">gateway console for your pocket</string>
+    <string name="login_server_label">Server address</string>
+    <string name="login_username_label">Username</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_password_show">Show</string>
+    <string name="login_password_hide">Hide</string>
+    <string name="login_remember">Remember server and username</string>
+    <string name="login_save_password">Save password (encrypted)</string>
+    <string name="login_submit">Log in</string>
+    <string name="login_submitting">Logging in…</string>
+    <string name="login_connect_direct">Connect directly</string>
+    <string name="login_connect_direct_hint">Gateway without authentication? Connect directly</string>
+    <string name="login_error_fill_server">Enter the server address</string>
+    <string name="login_error_fill_all">Enter the server address, username and password</string>
+    <string name="login_error_auth_required">This gateway requires a username and password</string>
+    <string name="login_password_note_saved">The password is stored encrypted on this phone via Android Keystore (can be disabled above). Cookies are always stored encrypted.</string>
+    <string name="login_password_note_memory">The password is only kept in memory and never saved. Cookies are stored encrypted.</string>
+
+    <!-- Sessions list -->
+    <string name="sessions_title">Sessions</string>
+    <string name="sessions_empty_title">no sessions yet</string>
+    <string name="sessions_empty_hint">Tap the button in the corner to start a new chat</string>
+    <string name="sessions_untitled">(untitled)</string>
+    <string name="sessions_msg_count">%1$d msg</string>
+    <string name="sessions_locked_session">This session is locked by another client</string>
+
+    <!-- Relative time -->
+    <string name="time_just_now">just now</string>
+    <string name="time_minutes_ago">%1$d min ago</string>
+    <string name="time_hours_ago">%1$d h ago</string>
+    <string name="time_days_ago">%1$d d ago</string>
+    <string name="time_months_ago">%1$d mo ago</string>
+    <string name="time_years_ago">%1$d y ago</string>
+
+    <!-- Session locks (plugin sheet + confirm dialogs) -->
+    <string name="locks_title">Session locks</string>
+    <string name="locks_count_badge">%1$d</string>
+    <string name="locks_empty">No active leases</string>
+    <string name="locks_untitled">Untitled session</string>
+    <string name="locks_session_id">ID %1$s</string>
+    <string name="locks_release">Release</string>
+    <string name="locks_releasing">Releasing…</string>
+    <string name="locks_clear_dead">Clear dead only</string>
+    <string name="locks_release_all">Release all…</string>
+    <string name="locks_alive">alive</string>
+    <string name="locks_dead">dead</string>
+    <string name="locks_pid">PID %1$d</string>
+    <string name="locks_confirm_title">Release this lease?</string>
+    <string name="locks_confirm_all_title">Release ALL leases?</string>
+    <string name="locks_confirm_alive_body">The owner process is still running. Releasing lets two clients write the same session at once. Continue?</string>
+    <string name="locks_confirm_all_body">This releases every lease, including owners that are still running. Two clients could then write the same session at once. Continue?</string>
+    <string name="locks_released_count">Released %1$d lease(s)</string>
+    <string name="locks_release_failed">Release failed: %1$s</string>
+
+    <!-- Chat -->
+    <string name="chat_new">New chat</string>
+    <string name="chat_title">Chat</string>
+    <string name="conn_connected">connected</string>
+    <string name="conn_connecting">connecting</string>
+    <string name="conn_disconnected">disconnected</string>
+    <string name="conn_error">error</string>
+    <string name="conn_idle">idle</string>
+    <string name="chat_input_hint">Message…</string>
+    <string name="chat_send">Send</string>
+    <string name="chat_replying">Hermes is replying…</string>
+    <string name="chat_creating">Creating session…</string>
+    <string name="chat_connecting_wait">Connecting…</string>
+    <string name="chat_not_connected">Not connected</string>
+    <string name="chat_load_older">Load earlier messages</string>
+    <string name="chat_loading_older">Loading earlier messages…</string>
+    <string name="chat_empty">No messages yet. Send one to start.</string>
+    <string name="chat_no_readable">No readable messages recently</string>
+    <string name="chat_discovery_timeout">Timed out waiting for the new session, please retry</string>
+    <string name="chat_lock_banner_title">Session “%1$s” is locked</string>
+    <string name="chat_lock_banner_owner">by %1$s · PID %2$d</string>
+    <string name="chat_lock_banner_hint">Connection failures may be caused by this lock.</string>
+    <string name="chat_lock_release">Release</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_account">Account</string>
+    <string name="settings_server">Server</string>
+    <string name="settings_username">Username</string>
+    <string name="settings_version">App version</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_selected">Selected</string>
+    <string name="settings_section_security">Security</string>
+    <string name="settings_save_password">Save password (encrypted)</string>
+    <string name="settings_section_language">Language</string>
+    <string name="lang_system">Follow system</string>
+    <string name="lang_zh">中文</string>
+    <string name="lang_en">English</string>
+    <string name="settings_section_gateway">Gateway status</string>
+    <string name="settings_logout">Log out</string>
+    <string name="settings_scope_note">This version implements Sessions / Chat / Status. files, models and cron pages are planned for later.</string>
+
+    <!-- Accent themes -->
+    <string name="theme_yellow">Amber</string>
+    <string name="theme_green">Terminal green</string>
+    <string name="theme_blue">Ice blue</string>
+    <string name="theme_purple">Violet</string>
+
+    <!-- Keep-alive foreground service -->
+    <string name="notify_channel_name">Background connection</string>
+    <string name="notify_keepalive_text">Keeping the connection alive (up to 10 minutes)</string>
+</resources>
